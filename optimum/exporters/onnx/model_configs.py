@@ -269,6 +269,19 @@ class MistralOnnxConfig(TextDecoderWithPositionIdsOnnxConfig):
     NORMALIZED_CONFIG_CLASS = NormalizedTextConfig.with_args(num_key_value_heads="num_key_value_heads", allow_new=True)
 
 
+class MixtralOnnxConfig(TextDecoderWithPositionIdsOnnxConfig):
+    # This is because of the patching of torch.triu in AttentionMaskConverter, that exists from transformers>=4.35
+    MIN_TRANSFORMERS_VERSION = version.parse("4.34.99")
+
+    # The ONNX export of this architecture needs the Trilu operator support, available since opset 14
+    DEFAULT_ONNX_OPSET = 14
+    DUMMY_INPUT_GENERATOR_CLASSES = (
+        MistralDummyPastKeyValuesGenerator,
+    ) + TextDecoderOnnxConfig.DUMMY_INPUT_GENERATOR_CLASSES
+    DUMMY_PKV_GENERATOR_CLASS = MistralDummyPastKeyValuesGenerator
+    NORMALIZED_CONFIG_CLASS = NormalizedTextConfig.with_args(num_key_value_heads="num_key_value_heads", allow_new=True)
+
+
 class MPTOnnxConfig(TextDecoderOnnxConfig):
     # MPT does not require position_ids input.
     DEFAULT_ONNX_OPSET = 13

@@ -751,6 +751,14 @@ class TasksManager:
             "text-classification",
             onnx="MistralOnnxConfig",
         ),
+        "mixtral": supported_tasks_mapping(
+            "feature-extraction",
+            "feature-extraction-with-past",
+            "text-generation",
+            "text-generation-with-past",
+            "text-classification",
+            onnx="MixtralOnnxConfig",
+        ),
         # TODO: enable once the missing operator is supported.
         # "mctct": supported_tasks_mapping(
         #     "feature-extraction",
