@@ -251,6 +251,8 @@ def validate_provider_availability(provider: str):
                             f"Asked to use {provider}, but `onnxruntime-training` package doesn't support {provider}. Please use `CUDAExecutionProvider` instead."
                         )
                 else:
+                    # Stop raising an ImportError; on ppc there is no onnxruntime-gpu package, but an onnxruntime=*=*cuda* build
+                    return
                     raise ImportError(
                         f"Asked to use {provider}, but `onnxruntime-gpu` package was not found. Make sure to install `onnxruntime-gpu` package instead of `onnxruntime`."
                     )
